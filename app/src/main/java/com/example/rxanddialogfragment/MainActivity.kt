@@ -1,10 +1,13 @@
 package com.example.rxanddialogfragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.Observable
 import io.reactivex.Observer
@@ -13,12 +16,13 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import java.util.concurrent.TimeUnit
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),CallBack {
     private val disposable = CompositeDisposable()
+    private var count =0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        //enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
         rx()
@@ -31,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             .throttleFirst(1500, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                val dialogFragment = MyDialogFragment()
+                val dialogFragment = MyDialogFragment(this@MainActivity)
                 dialogFragment.show(supportFragmentManager, "MY_DIALOG_TAG")
                 Log.d("Tag", "Clicked in rxClick")
             })
@@ -58,6 +62,16 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
+
+    override fun click(data: String) {
+        ++count
+        findViewById<TextView>(R.id.tvCount).text = count.toString()
+        findViewById<TextView>(R.id.tv).text = data
+        val dialogFragment = supportFragmentManager.findFragmentByTag("MY_DIALOG_TAG") as? DialogFragment
+        dialogFragment?.dismiss()
+    }
+
 
     override fun onDestroy() {
         disposable.dispose()

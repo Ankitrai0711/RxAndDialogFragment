@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.TextView
 
-class MyAdapter(val context: Context, val list: List<String>) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+class MyAdapter(val context: Context, val list: List<String>,val click:CallBack) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textView: TextView = itemView.findViewById(R.id.tv)
@@ -19,7 +19,13 @@ class MyAdapter(val context: Context, val list: List<String>) : RecyclerView.Ada
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textView.text = list[position]
+
+        val currentData = list[position]
+        holder.textView.text = currentData
+        holder.textView.setOnClickListener{
+
+            click.click(currentData)
+        }
     }
 
     override fun getItemCount(): Int {

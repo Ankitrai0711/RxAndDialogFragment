@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 
-class MyDialogFragment : DialogFragment() {
+class MyDialogFragment(val click:CallBack) : DialogFragment() {
  private lateinit var mcontext : Context
     override fun onAttach(context: Context) {
         mcontext = context
@@ -35,11 +35,7 @@ class MyDialogFragment : DialogFragment() {
             recycler.layoutManager = LinearLayoutManager(context)
 
 
-        recycler.adapter = context?.let { MyAdapter(it,list) }
-
-
-
-
+        recycler.adapter = context?.let { MyAdapter(it,list,click) }
             return view
         }
 
